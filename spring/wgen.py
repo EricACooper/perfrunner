@@ -30,6 +30,8 @@ def with_sleep(method, *args):
         method(self)
         actual_time = time.time() - t0
         delta = self.target_time - actual_time
+        logger.info('{0} delta is {1}'.format(self.sid, delta))
+ 
         if delta > 0:
             time.sleep(self.CORRECTION_FACTOR * delta)
         else:
@@ -520,7 +522,7 @@ class N1QLWorker(Worker):
 
     @with_sleep
     def do_batch(self):
-
+        logger.info('{0} n1ql_queries in do batch the op is {1}'.format( self.sid, self.ws.n1ql_op ) )
         if self.ws.n1ql_op == 'read':
             curr_items_spot = \
                 self.curr_items.value - self.ws.creates * self.ws.workers
